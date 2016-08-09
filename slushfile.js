@@ -22,6 +22,7 @@ var gulp = require('gulp'),
     inquirer = require('inquirer'),
     path = require('path'),
     replace = require('gulp-replace'),
+    stripLine = require('gulp-strip-line'),
     insert = require('gulp-insert');
 
 function format(string) {
@@ -131,19 +132,19 @@ gulp.task('default', function(done) {
  *
  *______________________________________________________________________________________
  */
-gulp.task('addsection', function(done) {
+gulp.task('add-section', function(done) {
 
     var prompts = [{
-        name: 'sectionToAdd',
-        message: 'Which section you want to add ?',
-        type: 'list',
-        choices: Object.keys(sections)
-    }
-    // ,
-    // {
-    //     name: 'sectionRenamed',
-    //     message: '(optional) Do you want a more specific name for this section ?'
-    // }
+            name: 'sectionToAdd',
+            message: 'Which section you want to add ?',
+            type: 'list',
+            choices: Object.keys(sections)
+        }
+        // ,
+        // {
+        //     name: 'sectionRenamed',
+        //     message: '(optional) Do you want a more specific name for this section ?'
+        // }
     ];
 
     //Ask
@@ -151,7 +152,6 @@ gulp.task('addsection', function(done) {
         function(answers) {
 
             var sectionToAdd = answers.sectionToAdd;
-            console.log(sectionToAdd);
             if (sections[sectionToAdd] == null) { //null or undefined
                 console.log('Sorry, this section doesnt exist. Choose amongst ' + Object.keys(sections));
             } else {
@@ -169,20 +169,75 @@ gulp.task('addsection', function(done) {
 
             function addHTML(sectionName) {
                 gulp.src('./index.html')
-                  .pipe(insert.append('{% include html/zee/'+ sectionName +'.html %}\r'))
-                  .pipe(gulp.dest('./'));
-            }
-            function addCSS(sectionName) {
-                gulp.src('./css/main.scss')
-                  .pipe(insert.append('@import "zee/'+ sectionName +'";\r'))
-                  .pipe(gulp.dest('./css'));
-            }
-            function addJS(sectionName) {
-                gulp.src('./_layouts/default.html')
-                  .pipe(replace(/<!--endjs-->/, '  {% include javascript/zee/'+ sectionName + '.js.html %}\r\t\t<!--endjs-->'))
-                  .pipe(gulp.dest('./_layouts'));
+                    .pipe(insert.append('{% include html/zee/' + sectionName + '.html %}\r'))
+                    .pipe(gulp.dest('./'));
             }
 
+            function addCSS(sectionName) {
+                gulp.src('./css/main.scss')
+                    .pipe(insert.append('@import "zee/' + sectionName + '";\r'))
+                    .pipe(gulp.dest('./css'));
+            }
+
+            function addJS(sectionName) {
+                gulp.src('./_layouts/default.html')
+                    .pipe(replace(/<!--endjs-->/, '  {% include javascript/zee/' + sectionName + '.js.html %}\r\t\t<!--endjs-->'))
+                    .pipe(gulp.dest('./_layouts'));
+            }
+
+
+        });
+
+});
+
+
+
+
+
+
+
+/*______________________________________________________________________________________
+ *
+ *
+ * Remove section
+ *
+ *______________________________________________________________________________________
+ */
+gulp.task('rm-section', function(done) {
+
+    var prompts = [{
+        name: 'sectionToRemove',
+        message: 'Which section you want to remove ?'
+    }];
+
+    //Ask
+    inquirer.prompt(prompts,
+        function(answers) {
+
+            var sectionToRemove = answers.sectionToRemove;
+
+            function removeHTML() {
+                return gulp
+                    .src('./index.html')
+                    .pipe(stripLine([sectionToRemove]))
+                    .pipe(gulp.dest('./'));
+            }
+            function removeCSS() {
+                return gulp
+                    .src('./css/main.scss')
+                    .pipe(stripLine([sectionToRemove]))
+                    .pipe(gulp.dest('./css'));
+            } 
+            function removeJS() {
+                return gulp
+                    .src('./_layouts/default.html')
+                    .pipe(stripLine([sectionToRemove]))
+                    .pipe(gulp.dest('./_layouts'));
+            }
+
+            removeHTML();
+            removeCSS();
+            removeJS();
 
         });
 
