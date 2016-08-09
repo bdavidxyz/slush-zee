@@ -7,7 +7,7 @@
 # Site settings
 title: <%= appName %>
 email: <%= authorEmail %>
-description: > # this means to ignore newlines until "twitter_username:"
+description: > # this means to ignore newlines until "github_username:"
   <%= appDescription %>
 github_username: <%= userName %>
 
