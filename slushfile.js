@@ -18,11 +18,15 @@ var gulp = require('gulp'),
     conflict = require('gulp-conflict'),
     template = require('gulp-template'),
     rename = require('gulp-rename'),
+    run = require('gulp-run'),
     _ = require('underscore.string'),
     inquirer = require('inquirer'),
     path = require('path'),
     replace = require('gulp-replace'),
+    gulpFn = require('gulp-fn'),
     stripLine = require('gulp-strip-line'),
+    fsPath = require('fs-path'),
+    fs = require('fs'),
     insert = require('gulp-insert');
 
 function format(string) {
@@ -222,12 +226,14 @@ gulp.task('rm-section', function(done) {
                     .pipe(stripLine([sectionToRemove]))
                     .pipe(gulp.dest('./'));
             }
+
             function removeCSS() {
                 return gulp
                     .src('./css/main.scss')
                     .pipe(stripLine([sectionToRemove]))
                     .pipe(gulp.dest('./css'));
-            } 
+            }
+
             function removeJS() {
                 return gulp
                     .src('./_layouts/default.html')
@@ -239,6 +245,69 @@ gulp.task('rm-section', function(done) {
             removeCSS();
             removeJS();
 
+        });
+
+});
+
+
+
+
+
+
+
+/*______________________________________________________________________________________
+ *
+ *
+ * Add lib
+ *
+ *______________________________________________________________________________________
+ */
+gulp.task('add-lib', function(done) {
+
+    var prompts = [{
+        name: 'libToAdd',
+        message: 'Which npm library you want to add ?'
+    }];
+
+    //Ask
+    inquirer.prompt(prompts,
+        function(answers) {
+            console.log(process.cwd());
+            var libToAdd = answers.libToAdd;
+            console.log('Please wait...')
+                // gulp.src(process.cwd() + '/package.json')
+                //     .pipe(install({args: ['--save', 'anim.css']}));
+            run('npm install --save ' + libToAdd).exec() // prints "Hello World\n". 
+                .pipe(gulp.dest('output'))
+                .pipe(gulpFn(function(a) {
+                    var sourcePath = process.cwd() + '/node_modules/' + libToAdd;
+                    var targetPath = process.cwd() + '/_sass/' + libToAdd;
+                    var p = require(sourcePath + '/package.json');
+                    console.log(p.main);
+                    targetPath += '/' + p.main;
+                    sourcePath += '/' + p.main;
+                    console.log('sourcePath is ' + sourcePath);
+                    console.log('targetPath is ' + targetPath);
+                    var sourceContent = fs.readFileSync(sourcePath);
+                    // fs.createReadStream(targetPath).pipe(fs.createWriteStream(process.cwd()+'/_sass/' + libToAdd +'/'+p.main));
+                    fsPath.writeFile(targetPath, sourceContent, function(err) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('wrote a file like DaVinci drew machines');
+                            // gulp.src('./css/main.scss')
+                            //  .pipe(insert.append('@import "' + libToAdd + '/' + p.main + '";\r'))
+                            //  .pipe(gulp.dest('./css'));
+
+                            gulp.src('./css/main.scss')
+                             .pipe(replace('// end-extlib', '@import "' + libToAdd + '/' + p.main + '";\r// end-extlib'))
+                             .pipe(gulp.dest('./css'));
+                        }
+                    });
+                    // console.log(sourceContent);
+                    // console.log(process.cwd());
+                    // console.log("Hello " + JSON.stringify(a));
+                }));
         });
 
 });
