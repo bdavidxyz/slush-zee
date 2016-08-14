@@ -11,7 +11,7 @@
   "scripts": {
     "add-section": "slush zee:add-section",
     "rm-section": "slush zee:rm-section",
-    "local": "gulp"
+    "local": "gulp",
     "deploy": "gulp deploy"
   },
   "license": "WTFPL",
