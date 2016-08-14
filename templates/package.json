@@ -30,7 +30,9 @@
     "gulp-sass": "2.3.1",
     "gulp-uglify": "1.5.3",
     "gulp-uncss": "1.0.5",
-    "slush-zee":"^0.1.1"
+    "slush-zee":"^0.1.1",
+    "gulp-if": "^2.0.1",
+    "yargs": "4.8.1"
   },
   "repository": {
     "type": "git",
