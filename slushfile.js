@@ -30,6 +30,8 @@ var gulp = require('gulp'),
   fs = require('fs'),
   insert = require('gulp-insert');
 
+var argv = require('yargs').argv;
+
 
 function format(string) {
   var username = string.toLowerCase();
@@ -102,6 +104,9 @@ gulp.task('default', function(done) {
     name: 'moveon',
     message: 'Continue?'
   }];
+
+  console.log('JSON.stringify(argv) ' + JSON.stringify(argv));
+
   //Ask
   inquirer.prompt(prompts,
     function(answers) {
@@ -116,7 +121,9 @@ gulp.task('default', function(done) {
             file.basename = '.' + file.basename.slice(2);
           }
         }))
-        .pipe(conflict('./'))
+        .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
+        .pipe(gulpif(!argv.overwriteAll, conflict('./')))
+        // .pipe(conflict('./'))
         .pipe(gulp.dest('./'))
         .pipe(install())
         .on('end', function() {

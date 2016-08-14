@@ -1,7 +1,7 @@
 {
   "name": "slush-zee",
   "description": "A landing page generator",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "https://github.com/bdavidxyz/slush-zee",
   "author": {
     "name": "bdavidxyz",
@@ -24,8 +24,7 @@
     "test": "echo \"No tests\"",
     "bower": "bower",
     "bower-installer": "bower-installer",
-    "generate": "slush zee",
-    "start": "slush zee"
+    "generate": "slush zee --overwriteAll"
   },
   "dependencies": {
     "bower": "^1.7.9",
@@ -45,7 +44,9 @@
     "inquirer": "^0.8.0",
     "slush": ">=1.0.0",
     "underscore": "1.8.3",
-    "underscore.string": "^2.3.3"
+    "underscore.string": "^2.3.3",
+    "gulp-if": "^2.0.1",
+    "yargs": "4.8.1"
   },
   "keywords": [
     "slushgenerator"
