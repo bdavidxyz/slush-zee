@@ -10,7 +10,9 @@
   "author": "<%= authorName %>",
   "scripts": {
     "add-section": "slush zee:add-section",
-    "rm-section": "slush zee:rm-section"
+    "rm-section": "slush zee:rm-section",
+    "local": "gulp"
+    "deploy": "gulp deploy"
   },
   "license": "WTFPL",
   "devDependencies": {
