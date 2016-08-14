@@ -8,6 +8,10 @@
     "npm": "~3.8.6"
   },
   "author": "<%= authorName %>",
+  "scripts": {
+    "add-section": "slush zee:add-section",
+    "rm-section": "slush zee:rm-section"
+  },
   "license": "WTFPL",
   "devDependencies": {
     "browser-sync": "2.12.8",
