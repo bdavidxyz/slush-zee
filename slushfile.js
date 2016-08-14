@@ -16,6 +16,7 @@ var sections = {
 var gulp = require('gulp'),
   install = require('gulp-install'),
   conflict = require('gulp-conflict'),
+  gulpif = require('gulp-if'),
   template = require('gulp-template'),
   rename = require('gulp-rename'),
   run = require('gulp-run'),
