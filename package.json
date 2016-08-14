@@ -1,7 +1,7 @@
 {
   "name": "slush-zee",
   "description": "A landing page generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/bdavidxyz/slush-zee",
   "author": {
     "name": "bdavidxyz",
@@ -23,7 +23,9 @@
   "scripts": {
     "test": "echo \"No tests\"",
     "bower": "bower",
-    "bower-installer": "bower-installer"
+    "bower-installer": "bower-installer",
+    "generate": "slush zee",
+    "addlib": "slush zee:addlib"
   },
   "dependencies": {
     "bower": "^1.7.9",
