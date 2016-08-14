@@ -1,0 +1,20 @@
+{
+  "name": "test",
+  "version": "0.1",
+  "dependencies": {
+    "backbone": "latest",
+    "jquery-ui": "latest",
+    "bourbon": "latest"
+  },
+  "install": {
+    "path": "some/path",
+    "sources": {
+      "jquery-ui": [
+        "bower_components/jquery-ui/ui/**"
+      ],
+      "bourbon": [
+        "bower_components/bourbon/app/assets/stylesheets/**"
+      ]
+    }
+  }
+}

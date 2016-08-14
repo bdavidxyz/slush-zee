@@ -21,9 +21,13 @@
     "npm": ">=1.4.3"
   },
   "scripts": {
-    "test": "echo \"No tests\""
+    "test": "echo \"No tests\"",
+    "bower": "bower",
+    "bower-installer": "bower-installer"
   },
   "dependencies": {
+    "bower": "^1.7.9",
+    "bower-installer": "^1.2.0",
     "fs-path": "0.0.22",
     "gulp": "^3.6.2",
     "gulp-conflict": "^0.1.1",
