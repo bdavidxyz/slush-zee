@@ -122,8 +122,9 @@ gulp.task('default', function(done) {
             file.basename = '.' + file.basename.slice(2);
           }
         }))
-        .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
-        .pipe(gulpif(!argv.overwriteAll, conflict('./')))
+        // .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
+        // .pipe(gulpif(!argv.overwriteAll, conflict('./')))
+        .pipe(gulpif(!argv.overwriteAll, conflict('./', {replaceAll:true})))
         // .pipe(conflict('./'))
         .pipe(gulp.dest('./'))
         .pipe(install())
