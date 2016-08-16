@@ -124,7 +124,7 @@ gulp.task('default', function(done) {
         }))
         // .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
         // .pipe(gulpif(!argv.overwriteAll, conflict('./')))
-        .pipe(gulpif(!argv.overwriteAll, conflict('./', {replaceAll:true})))
+        .pipe(conflict('./', {replaceAll:true}))
         // .pipe(conflict('./'))
         .pipe(gulp.dest('./'))
         .pipe(install())
