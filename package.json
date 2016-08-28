@@ -38,6 +38,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.5.4",
     "gulp-run": "^1.7.1",
+    "gulp-clean": "0.3.2",
     "gulp-strip-line": "0.0.1",
     "gulp-template": "^0.1.1",
     "iniparser": "^1.0.5",
@@ -46,6 +47,7 @@
     "underscore": "1.8.3",
     "underscore.string": "^2.3.3",
     "gulp-if": "^2.0.1",
+    "gulp-google-webfonts":"0.0.14",
     "yargs": "4.8.1"
   },
   "keywords": [

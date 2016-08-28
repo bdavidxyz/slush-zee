@@ -1,38 +1,40 @@
 /*
- * slush-slush-zee
- * https://github.com/bdavidxyz/slush-slush-zee
+ * slush-zee
+ * https://github.com/bdavidxyz/slush-zee
  *
  * Copyright (c) 2016, bdavidxyz
  * Licensed under the MIT license.
  */
 
-'use strict';
+ 'use strict';
 
-var sections = {
+ var sections = {
   hero1: ['html', 'css'],
   navbar1: ['html', 'css', 'js']
 };
 
 var gulp = require('gulp'),
-  install = require('gulp-install'),
-  conflict = require('gulp-conflict'),
-  gulpif = require('gulp-if'),
-  template = require('gulp-template'),
-  rename = require('gulp-rename'),
-  run = require('gulp-run'),
-  ustring = require("underscore.string"),
-  _ = require("underscore"),
-  inquirer = require('inquirer'),
-  path = require('path'),
-  replace = require('gulp-replace'),
-  gulpFn = require('gulp-fn'),
-  stripLine = require('gulp-strip-line'),
-  fsPath = require('fs-path'),
-  fs = require('fs'),
-  insert = require('gulp-insert');
+install = require('gulp-install'),
+conflict = require('gulp-conflict'),
+gulpif = require('gulp-if'),
+template = require('gulp-template'),
+rename = require('gulp-rename'),
+run = require('gulp-run'),
+ustring = require("underscore.string"),
+_ = require("underscore"),
+inquirer = require('inquirer'),
+path = require('path'),
+replace = require('gulp-replace'),
+clean = require('gulp-clean'),
+gulpFn = require('gulp-fn'),
+stripLine = require('gulp-strip-line'),
+fsPath = require('fs-path'),
+fs = require('fs'),
+insert = require('gulp-insert');
 
 var argv = require('yargs').argv;
-
+var googleWebFonts = require('gulp-google-webfonts');
+var fs = require('fs');
 
 function format(string) {
   var username = string.toLowerCase();
@@ -41,7 +43,7 @@ function format(string) {
 
 var defaults = (function() {
   var workingDirName = path.basename(process.cwd()),
-    homeDir, osUserName, configFile, user;
+  homeDir, osUserName, configFile, user;
 
   if (process.platform === 'win32') {
     homeDir = process.env.USERPROFILE;
@@ -76,7 +78,7 @@ var defaults = (function() {
  *
  *______________________________________________________________________________________
  */
-gulp.task('default', function(done) {
+ gulp.task('default', function(done) {
   var prompts = [{
     name: 'appName',
     message: 'What is the name of your project?',
@@ -116,12 +118,12 @@ gulp.task('default', function(done) {
       }
       answers.appNameSlug = ustring.slugify(answers.appName);
       gulp.src(__dirname + '/templates/**')
-        .pipe(template(answers))
-        .pipe(rename(function(file) {
-          if (file.basename[0] === '_' && file.basename[1] === '_') {
-            file.basename = '.' + file.basename.slice(2);
-          }
-        }))
+      .pipe(template(answers))
+      .pipe(rename(function(file) {
+        if (file.basename[0] === '_' && file.basename[1] === '_') {
+          file.basename = '.' + file.basename.slice(2);
+        }
+      }))
         // .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
         // .pipe(gulpif(!argv.overwriteAll, conflict('./')))
         .pipe(conflict('./', {replaceAll:true}))
@@ -131,7 +133,7 @@ gulp.task('default', function(done) {
         .on('end', function() {
           done();
         });
-    });
+      });
 });
 
 
@@ -147,20 +149,20 @@ gulp.task('default', function(done) {
  *
  *______________________________________________________________________________________
  */
-gulp.task('add-section', function(done) {
+ gulp.task('add-section', function(done) {
 
   var prompts = [{
-      name: 'sectionToAdd',
-      message: 'Which section you want to add ?',
-      type: 'list',
-      choices: Object.keys(sections)
-    }
+    name: 'sectionToAdd',
+    message: 'Which section you want to add ?',
+    type: 'list',
+    choices: Object.keys(sections)
+  }
     // ,
     // {
     //     name: 'sectionRenamed',
     //     message: '(optional) Do you want a more specific name for this section ?'
     // }
-  ];
+    ];
 
   //Ask
   inquirer.prompt(prompts,
@@ -184,20 +186,20 @@ gulp.task('add-section', function(done) {
 
       function addHTML(sectionName) {
         gulp.src('./index.html')
-          .pipe(insert.append('{% include html/zee/' + sectionName + '.html %}\r'))
-          .pipe(gulp.dest('./'));
+        .pipe(insert.append('{% include html/zee/' + sectionName + '.html %}\r'))
+        .pipe(gulp.dest('./'));
       }
 
       function addCSS(sectionName) {
         gulp.src('./css/main.scss')
-          .pipe(insert.append('@import "zee/' + sectionName + '";\r'))
-          .pipe(gulp.dest('./css'));
+        .pipe(insert.append('@import "zee/' + sectionName + '";\r'))
+        .pipe(gulp.dest('./css'));
       }
 
       function addJS(sectionName) {
         gulp.src('./_layouts/default.html')
-          .pipe(replace(/<!--endjs-->/, '  {% include javascript/zee/' + sectionName + '.js.html %}\r\t\t<!--endjs-->'))
-          .pipe(gulp.dest('./_layouts'));
+        .pipe(replace(/<!--endjs-->/, '  {% include javascript/zee/' + sectionName + '.js.html %}\r\t\t<!--endjs-->'))
+        .pipe(gulp.dest('./_layouts'));
       }
 
 
@@ -218,7 +220,7 @@ gulp.task('add-section', function(done) {
  *
  *______________________________________________________________________________________
  */
-gulp.task('rm-section', function(done) {
+ gulp.task('rm-section', function(done) {
 
   var prompts = [{
     name: 'sectionToRemove',
@@ -233,23 +235,23 @@ gulp.task('rm-section', function(done) {
 
       function removeHTML() {
         return gulp
-          .src('./index.html')
-          .pipe(stripLine([sectionToRemove]))
-          .pipe(gulp.dest('./'));
+        .src('./index.html')
+        .pipe(stripLine([sectionToRemove]))
+        .pipe(gulp.dest('./'));
       }
 
       function removeCSS() {
         return gulp
-          .src('./css/main.scss')
-          .pipe(stripLine([sectionToRemove]))
-          .pipe(gulp.dest('./css'));
+        .src('./css/main.scss')
+        .pipe(stripLine([sectionToRemove]))
+        .pipe(gulp.dest('./css'));
       }
 
       function removeJS() {
         return gulp
-          .src('./_layouts/default.html')
-          .pipe(stripLine([sectionToRemove]))
-          .pipe(gulp.dest('./_layouts'));
+        .src('./_layouts/default.html')
+        .pipe(stripLine([sectionToRemove]))
+        .pipe(gulp.dest('./_layouts'));
       }
 
       removeHTML();
@@ -263,112 +265,61 @@ gulp.task('rm-section', function(done) {
 
 
 
-
-
-
 /*______________________________________________________________________________________
  *
- *
- * Add lib
+ * Update theme
  *
  *______________________________________________________________________________________
  */
-gulp.task('add-lib', function(done) {
+ gulp.task('update-theme', function(done) {
 
   var prompts = [{
-    name: 'libToAdd',
-    message: 'Which npm library you want to add ?'
-  }];
-
+    name: 'headingFont',
+    message: 'Which font do you want as heading ? (type name of a google web font)'
+  },
+  {
+    name: 'displayFont',
+    message: 'Which font do you want as display ? (type name of a google web font)'
+  },
+  {
+    name: 'primaryColor',
+    message: 'Which color do you want as primary color ? (for ex. #0275d8)'
+  }
+  ];
+  
   //Ask
   inquirer.prompt(prompts,
     function(answers) {
-      console.log(process.cwd());
-      var libToAdd = answers.libToAdd;
-      console.log('Please wait...')
 
-      run('npm install --save ' + libToAdd).exec() // prints "Hello World\n". 
-        .pipe(gulp.dest('output'))
-        .pipe(gulpFn(function(a) {
+      var headingFont = answers.headingFont;
+      var displayFont = answers.displayFont;
+      var primaryColor = answers.primaryColor;
 
-          var sourcePath = '';
-          sourcePath = process.cwd() + '/node_modules/' + libToAdd;
-
-          //try to extract bower.json, far better main props than npm (js only)
-          var packageFile = null;
-          try {
-            packageFile = require(sourcePath + '/bower.json');
-          } catch (e) {
-            packageFile = null;
-          }
-          if (packageFile === null) {
-            packageFile = require(sourcePath + '/package.json');
-          }
-          console.log(packageFile);
+      var options = { };
+      gulp.src('./fonts/**', {read: false})
+      .pipe(clean())
+      .pipe(gulpFn(function() {
+        fs.writeFile('fonts.list', headingFont, function() {
+          return gulp.src('./fonts.list')
+          .pipe(googleWebFonts(options))
+          .pipe(gulp.dest('fonts'))
+        });
+      }));
 
 
-          var mainFilesName = packageFile.main;
-          if (!_.isArray(mainFilesName)) {
-            var tempArray = [];
-            tempArray.push(mainFilesName);
-            mainFilesName = tempArray;
-          }
-          console.log(JSON.stringify(mainFilesName));
 
-          _.each(mainFilesName, function(mainFileNameParam) {
-            var mainFileName = mainFileNameParam;
-            if (mainFileNameParam.indexOf('./') === 0) {
-              mainFileName = mainFileNameParam.substring(2);
-            }
-            var targetPath = '';
+      // return gulp.src('./fonts.list', {read: false})
+      //   // .pipe(stripLine(/^/))
+      //   .pipe(insert.append('aaaaaa'))
+      //   .pipe(gulp.dest('./'));
+      //   // .pipe(googleWebFonts(options))
+      //   // .pipe(gulp.dest('out/fonts'))
+      //   ;
 
-            var mainFileNameExtension = mainFileName.split('.').pop();
-            var mainFileNameOnly = mainFileName;
-            if (mainFileNameOnly.indexOf('/') > -1) {
-              mainFileNameOnly = mainFileName.split('/').pop();
-            }
+      
 
-            if (mainFileNameExtension === 'css') {
-              targetPath = process.cwd() + '/_sass/' + libToAdd;
-            } else if (mainFileNameExtension === 'js') {
-              targetPath = process.cwd() + '/_includes/javascript/' + libToAdd;
-            } else {
-              console.log('Only CSS or JS files can be included');
-              process.exit(1);
-            }
-            targetPath += '/' + mainFileNameOnly;
-            var sourcePath2 = sourcePath + '/' + mainFileName;
-            console.log('targetPath is ' + targetPath);
-            console.log('sourcePath2 is ' + sourcePath2);
-
-            var sourceContent = fs.readFileSync(sourcePath2);
-            if (mainFileNameExtension === 'js') {
-              targetPath += '.html';
-              sourceContent = '<script type="text/javascript">\r' + sourceContent + '\r</script>';
-            }
-            fsPath.writeFile(targetPath, sourceContent, function(err) {
-              if (err) {
-                throw err;
-              } else {
-                if (mainFileNameExtension === 'css') {
-                  gulp.src('./css/main.scss')
-                    .pipe(replace('// end-extlib', 
-                                  '@import "' + libToAdd + '/' + mainFileNameOnly + '";\r// end-extlib'))
-                    .pipe(gulp.dest('./css'));
-                } else if (mainFileNameExtension === 'js') {
-                  gulp.src('./_layouts/default.html')
-                    .pipe(replace(/<!--end-ext-lib-->/, 
-                                  '  {% include javascript/' + libToAdd + '/' + mainFileNameOnly + '.html %}\r\t\t<!--end-ext-lib-->'))
-                    .pipe(gulp.dest('./_layouts'));
-                } else {
-                  console.log('Only CSS or JS files can be included');
-                  process.exit(1);
-                }
-                console.log('Library ' + libToAdd + ' is now correctly included');
-              }
-            });
-          });
-        }));
     });
 
 });
+
+
