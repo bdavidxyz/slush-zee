@@ -295,14 +295,27 @@ var defaults = (function() {
       var displayFont = answers.displayFont;
       var primaryColor = answers.primaryColor;
 
+      function replaceHeadingFont() {
+        console.log('replaceHeadingFont');
+        return gulp
+         .src('./_sass/theme.scss')
+         .pipe(stripLine(/^./))
+         .pipe(replace('\n', ''))
+         .pipe(insert.append('$headings-font-family: "' + headingFont + '";\n'))   
+         .pipe(insert.append('$font-family-base: "' + displayFont + '";\n'))   
+         .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
+         .pipe(gulp.dest('./_sass'));
+      }
+
       var options = { };
       gulp.src('./fonts/**', {read: false})
       .pipe(clean())
       .pipe(gulpFn(function() {
-        fs.writeFile('fonts.list', headingFont, function() {
+        fs.writeFile('fonts.list', headingFont + '\n' + displayFont, function() {
           return gulp.src('./fonts.list')
           .pipe(googleWebFonts(options))
           .pipe(gulp.dest('fonts'))
+          .pipe(gulpFn(replaceHeadingFont))
         });
       }));
 
