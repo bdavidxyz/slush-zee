@@ -113,9 +113,15 @@ var defaults = (function() {
   //Ask
   inquirer.prompt(prompts,
     function(answers) {
+
+      gulp.src('./fonts.list')
+            .pipe(googleWebFonts({}))
+            .pipe(gulp.dest('fonts'));
+
       if (!answers.moveon) {
         return done();
       }
+      
       answers.appNameSlug = ustring.slugify(answers.appName);
       gulp.src(__dirname + '/templates/**')
       .pipe(template(answers))
@@ -127,12 +133,6 @@ var defaults = (function() {
         .pipe(conflict('./', {replaceAll:true}))
         .pipe(gulp.dest('./'))
         .pipe(install())
-        .pipe(googleWebFonts({}))
-        .pipe(gulpFn(function() {
-            return gulp.src('./fonts.list')
-            .pipe(googleWebFonts(options))
-            .pipe(gulp.dest('fonts'))
-        }))
         .on('end', function() {
           done();
         });
