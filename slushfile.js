@@ -295,14 +295,21 @@ var defaults = (function() {
       var displayFont = answers.displayFont;
       var primaryColor = answers.primaryColor;
 
+      function getFontName(fontArg) {
+        return fontArg.split('+').join(' ').substring(0, headingFont.indexOf(':')).replace(':', '');
+      }
+
+      var headingFontName = getFontName(headingFont);
+      var displayFontName = getFontName(displayFont);
+
       function replaceHeadingFont() {
         console.log('replaceHeadingFont');
         return gulp
          .src('./_sass/theme.scss')
          .pipe(stripLine(/^./))
          .pipe(replace('\n', ''))
-         .pipe(insert.append('$headings-font-family: "' + headingFont + '";\n'))   
-         .pipe(insert.append('$font-family-base: "' + displayFont + '";\n'))   
+         .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
+         .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
          .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
          .pipe(gulp.dest('./_sass'));
       }
@@ -318,16 +325,6 @@ var defaults = (function() {
           .pipe(gulpFn(replaceHeadingFont))
         });
       }));
-
-
-
-      // return gulp.src('./fonts.list', {read: false})
-      //   // .pipe(stripLine(/^/))
-      //   .pipe(insert.append('aaaaaa'))
-      //   .pipe(gulp.dest('./'));
-      //   // .pipe(googleWebFonts(options))
-      //   // .pipe(gulp.dest('out/fonts'))
-      //   ;
 
       
 
