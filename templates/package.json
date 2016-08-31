@@ -12,6 +12,7 @@
     "add-section": "slush zee:add-section",
     "rm-section": "slush zee:rm-section",
     "update-theme": "slush zee:update-theme",
+    "generate": "echo 'project cannot be generate twice'",
     "local": "gulp",
     "deploy": "gulp deploy"
   },

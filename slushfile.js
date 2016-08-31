@@ -13,7 +13,7 @@
   navbar1: ['html', 'css', 'js']
 };
 
-var gulp = require('gulp'),
+var gulp = require('gulp-run-seq'),
 install = require('gulp-install'),
 conflict = require('gulp-conflict'),
 gulpif = require('gulp-if'),
@@ -78,8 +78,13 @@ var defaults = (function() {
  *
  *______________________________________________________________________________________
  */
- gulp.task('default', function(done) {
-  var prompts = [{
+//  gulp.task('default', ['other-task'], function(done) {
+//           console.log("hey I'm defauuuuuuuuuuuuuuuuuuuuuuult");
+// });
+
+
+gulp.task('default', function(done) {
+var prompts = [{
     name: 'appName',
     message: 'What is the name of your project?',
     default: defaults.appName
@@ -131,18 +136,12 @@ var defaults = (function() {
         .pipe(conflict('./', {replaceAll:true}))
         .pipe(gulp.dest('./'))
         .pipe(install())
-        .on('end', function() {
-          gulp.src('./fonts.list')
-            .pipe(googleWebFonts({}))
-            .pipe(gulp.dest('fonts'))
-            .pipe(gulpFn(done));
-
-        });
+        .on('finish', function() {
+          _.partial(update_theme, 'Roboto+Condensed:700', 'Roboto:300,400,700', '#6b15a1')();
+          done();
+        })
       });
 });
-
-
-
 
 
 
@@ -300,15 +299,29 @@ var defaults = (function() {
       var displayFont = answers.displayFont;
       var primaryColor = answers.primaryColor;
 
-      function getFontName(fontArg) {
-        return fontArg.split('+').join(' ').substring(0, headingFont.indexOf(':')).replace(':', '');
+      update_theme(headingFont, displayFont, primaryColor);
+
+    });
+
+});
+
+function update_theme(headingFont, displayFont, primaryColor) {
+  
+    console.log('headingFont is now ' + headingFont);
+    console.log('displayFont is now ' + displayFont);
+    console.log('primaryColor is now ' + primaryColor);
+    
+    function getFontName(fontArg) {
+        if (fontArg.indexOf(':') === -1) {
+          return fontArg.split('+').join(' ');
+        }
+        return fontArg.split('+').join(' ').substring(0, fontArg.indexOf(':')).replace(':', '');
       }
 
       var headingFontName = getFontName(headingFont);
       var displayFontName = getFontName(displayFont);
 
       function replaceHeadingFont() {
-        console.log('replaceHeadingFont');
         return gulp
         .src('./_sass/theme.scss')
         .pipe(stripLine(/^./))
@@ -320,8 +333,9 @@ var defaults = (function() {
       }
 
       var options = { };
+
       gulp.src('./fonts/**', {read: false})
-      .pipe(clean())
+      // .pipe(clean())
       .pipe(gulpFn(function() {
         fs.writeFile('fonts.list', headingFont + '\n' + displayFont, function() {
           return gulp.src('./fonts.list')
@@ -330,11 +344,4 @@ var defaults = (function() {
           .pipe(gulpFn(replaceHeadingFont))
         });
       }));
-
-      
-
-    });
-
-});
-
-
+}
