@@ -124,12 +124,15 @@ var defaults = (function() {
           file.basename = '.' + file.basename.slice(2);
         }
       }))
-        // .pipe(gulpif(argv.overwriteAll, conflict('./', {replaceAll:true})))
-        // .pipe(gulpif(!argv.overwriteAll, conflict('./')))
         .pipe(conflict('./', {replaceAll:true}))
-        // .pipe(conflict('./'))
         .pipe(gulp.dest('./'))
         .pipe(install())
+        .pipe(googleWebFonts({}))
+        .pipe(gulpFn(function() {
+            return gulp.src('./fonts.list')
+            .pipe(googleWebFonts(options))
+            .pipe(gulp.dest('fonts'))
+        }))
         .on('end', function() {
           done();
         });
@@ -305,13 +308,13 @@ var defaults = (function() {
       function replaceHeadingFont() {
         console.log('replaceHeadingFont');
         return gulp
-         .src('./_sass/theme.scss')
-         .pipe(stripLine(/^./))
-         .pipe(replace('\n', ''))
-         .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
-         .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
-         .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
-         .pipe(gulp.dest('./_sass'));
+        .src('./_sass/theme.scss')
+        .pipe(stripLine(/^./))
+        .pipe(replace('\n', ''))
+        .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
+        .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
+        .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
+        .pipe(gulp.dest('./_sass'));
       }
 
       var options = { };
