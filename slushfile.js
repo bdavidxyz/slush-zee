@@ -10,6 +10,14 @@
 
  var sections = {
   hero1: ['html', 'css'],
+  hero2: ['html', 'css'],
+  feature1: ['html'],
+  feature2: ['html', 'css'],
+  feature3: ['html'],
+  feature4: ['html', 'css'],
+  footer1: ['html', 'css'],
+  footer2: ['html', 'css'],
+  pricingtable1: ['html', 'css'],
   navbar1: ['html', 'css', 'js']
 };
 
@@ -157,7 +165,7 @@ var prompts = [{
 
   var prompts = [{
     name: 'sectionToAdd',
-    message: 'Which section you want to add ?',
+    message: 'Which section you want to add ? (see https://bdavidxyz.github.io/zee/sections-doc/) ',
     type: 'list',
     choices: Object.keys(sections)
   }
