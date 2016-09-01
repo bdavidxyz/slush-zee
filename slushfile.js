@@ -21,7 +21,7 @@
   navbar1: ['html', 'css', 'js']
 };
 
-var gulp = require('gulp-run-seq'),
+var gulp = require('gulp'),
 install = require('gulp-install'),
 conflict = require('gulp-conflict'),
 gulpif = require('gulp-if'),

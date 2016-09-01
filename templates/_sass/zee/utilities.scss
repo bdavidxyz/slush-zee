@@ -85,3 +85,10 @@
   top: 0;
   left: 0;
 }
+
+/* allows to fill SVG with the right color
+–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+svg {
+  color:$brand-primary;
+  fill:currentColor;
+}
