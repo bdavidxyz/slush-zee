@@ -11,6 +11,9 @@
  var sections = {
   hero1: ['html', 'css'],
   hero2: ['html', 'css'],
+  separator1: ['html', 'css'],
+  separator2: ['html', 'css'],
+  separator3: ['html', 'css'],
   feature1: ['html'],
   feature2: ['html', 'css'],
   feature3: ['html'],
