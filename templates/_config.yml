@@ -14,6 +14,11 @@ github_username: <%= userName %>
 # Build settings
 markdown: kramdown
 
+# Settings specific to Zee
+#zee_google_analytics: "" 
+#zee_crisp_im: "" 
+
+
 # Exclude nodes artifacts from build
 exclude:
   - package.json

@@ -4,5 +4,3 @@
 
 
 baseurl: "/<%= appName %>" # the subpath of your site, e.g. /blog
-#zee_google_analytics: "" 
-#zee_crisp_im: "" 

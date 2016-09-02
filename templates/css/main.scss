@@ -56,7 +56,7 @@ $spacers: (
 @import "zee/utilities";
 
 {% if site.zee_crisp_im %}
-@import "zee/crisp";
+@import "crisp/crisp";
 {% endif %}
 
 
