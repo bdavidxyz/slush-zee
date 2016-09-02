@@ -19,12 +19,11 @@
 
     $('.crisp-0 style').waitUntilExists(function function_name(argument) {
     console.log('loaded crisp ' + $('.crisp-0 style').length);
-      $('.crisp-0 style').text(
-        $('.crisp-0 style').text().replace('.crisp-client .crisp-1 .crisp-6', '.anything')
-      ); 
-      $('.crisp-0 style').text(
-        $('.crisp-0 style').text().replace('.crisp-client .crisp-1 .crisp-12', '.anything')
-      );
+      var modified = $('.crisp-0 style').text()
+      modified = modified.replace('.crisp-client .crisp-1 .crisp-6', '.anything');
+      modified = modified.replace('.crisp-client .crisp-1 .crisp-12', '.anything');
+      modified = modified.replace('.crisp-client .crisp-1 .crisp-10', '.anything');
+      $('.crisp-0 style').text(modified); 
     });
 
 
