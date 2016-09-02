@@ -17,5 +17,8 @@ markdown: kramdown
 # Exclude nodes artifacts from build
 exclude:
   - package.json
+  - fonts.list
+  - npm-debug.log
   - node_modules
   - gulpfile.js
+  

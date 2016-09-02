@@ -1,0 +1,34 @@
+
+{% if site.zee_crisp_im %}
+
+
+  <!-- Crisp Im -->
+  <script>
+
+//jQuery plugin waitUntilExists
+(function(e,f){var b={},g=function(a){b[a]&&(f.clearInterval(b[a]),b[a]=null)};e.fn.waitUntilExists=function(a,h,j){var c=this.selector,d=e(c),k=d.not(function(){return e(this).data("waitUntilExists.found")});"remove"===a?g(c):(k.each(a).data("waitUntilExists.found",!0),h&&d.length?g(c):j||(b[c]=f.setInterval(function(){d.waitUntilExists(a,h,!0)},500)));return d}})(jQuery,window);
+
+  window.CRISP_WEBSITE_ID = "{{ site.zee_crisp_im }}";
+  (function(){
+    d=document;
+    s=d.createElement("script");
+    s.src="https://client.crisp.im/l.js";
+    s.async=1;
+    d.getElementsByTagName("head")[0].appendChild(s);})();
+
+
+    $('.crisp-0 style').waitUntilExists(function function_name(argument) {
+    console.log('loaded crisp ' + $('.crisp-0 style').length);
+      $('.crisp-0 style').text(
+        $('.crisp-0 style').text().replace('.crisp-client .crisp-1 .crisp-6', '.anything')
+      ); 
+      $('.crisp-0 style').text(
+        $('.crisp-0 style').text().replace('.crisp-client .crisp-1 .crisp-12', '.anything')
+      );
+    });
+
+
+
+  </script>
+  <!-- End Crisp Im  -->
+{% endif %}
