@@ -1,7 +1,7 @@
 {
   "name": "slush-zee",
   "description": "A landing page generator",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "homepage": "https://github.com/bdavidxyz/slush-zee",
   "author": {
     "name": "bdavidxyz",
@@ -29,10 +29,11 @@
   "dependencies": {
     "bower": "^1.7.9",
     "bower-installer": "^1.2.0",
-    "fs-path": "0.0.22",
     "gulp": "^3.6.2",
     "gulp-clean": "0.3.2",
     "gulp-conflict": "0.4.0",
+    "gulp-delete-lines": "0.0.7",
+    "gulp-file-insert": "^1.0.2",
     "gulp-fn": "0.0.0",
     "gulp-google-webfonts": "0.0.14",
     "gulp-if": "^2.0.1",

@@ -11,9 +11,6 @@
  var sections = {
   hero1: ['html', 'css'],
   hero2: ['html', 'css'],
-  separator1: ['html', 'css'],
-  separator2: ['html', 'css'],
-  separator3: ['html', 'css'],
   feature1: ['html'],
   feature2: ['html', 'css'],
   feature3: ['html'],
@@ -21,17 +18,23 @@
   footer1: ['html', 'css'],
   footer2: ['html', 'css'],
   pricingtable1: ['html', 'css'],
-  navbar1: ['html', 'css', 'js']
+  navbar1: ['html', 'css', 'js'],
+  separator1: ['html', 'css'],
+  separator2: ['html', 'css'],
+  separator3: ['html', 'css']
 };
 
+
 var gulp = require('gulp'),
-install = require('gulp-install'),
+ install = require('gulp-install'),
+ gfi = require('gulp-file-insert'),
+ deleteLines = require('gulp-delete-lines'),
 conflict = require('gulp-conflict'),
 gulpif = require('gulp-if'),
 template = require('gulp-template'),
 rename = require('gulp-rename'),
 run = require('gulp-run'),
-ustring = require("underscore.string"),
+ustring = require('underscore.string'),
 _ = require("underscore"),
 inquirer = require('inquirer'),
 path = require('path'),
@@ -39,13 +42,11 @@ replace = require('gulp-replace'),
 clean = require('gulp-clean'),
 gulpFn = require('gulp-fn'),
 stripLine = require('gulp-strip-line'),
-fsPath = require('fs-path'),
-fs = require('fs'),
-insert = require('gulp-insert');
+googleWebFonts = require('gulp-google-webfonts'),
+insert = require('gulp-insert'),
+argv = require('yargs').argv,
+fs = require('fs-extra');
 
-var argv = require('yargs').argv;
-var googleWebFonts = require('gulp-google-webfonts');
-var fs = require('fs');
 
 function format(string) {
   var username = string.toLowerCase();
@@ -82,6 +83,9 @@ var defaults = (function() {
 
 
 
+
+
+
 /*______________________________________________________________________________________
  *
  *
@@ -89,13 +93,8 @@ var defaults = (function() {
  *
  *______________________________________________________________________________________
  */
-//  gulp.task('default', ['other-task'], function(done) {
-//           console.log("hey I'm defauuuuuuuuuuuuuuuuuuuuuuult");
-// });
-
-
 gulp.task('default', function(done) {
-var prompts = [{
+  var prompts = [{
     name: 'appName',
     message: 'What is the name of your project?',
     default: defaults.appName
@@ -124,7 +123,6 @@ var prompts = [{
     message: 'Continue?'
   }];
 
-  console.log('JSON.stringify(argv) ' + JSON.stringify(argv));
 
   //Ask
   inquirer.prompt(prompts,
@@ -144,15 +142,18 @@ var prompts = [{
           file.basename = '.' + file.basename.slice(2);
         }
       }))
-        .pipe(conflict('./', {replaceAll:true}))
-        .pipe(gulp.dest('./'))
-        .pipe(install())
-        .on('finish', function() {
-          _.partial(update_theme, 'Roboto+Condensed:700', 'Roboto:300,400,700', '#6b15a1')();
-          done();
-        })
-      });
+      .pipe(conflict('./', {replaceAll:true}))
+      .pipe(gulp.dest('./'))
+      .pipe(install())
+      .on('finish', function() {
+        _.partial(update_theme, 'Roboto+Condensed:700', 'Roboto:300,400,700', '#6b15a1')();
+        done();
+      })
+    });
 });
+
+
+
 
 
 
@@ -172,11 +173,6 @@ var prompts = [{
     type: 'list',
     choices: Object.keys(sections)
   }
-    // ,
-    // {
-    //     name: 'sectionRenamed',
-    //     message: '(optional) Do you want a more specific name for this section ?'
-    // }
     ];
 
   //Ask
@@ -280,6 +276,13 @@ var prompts = [{
 
 
 
+
+
+
+
+
+
+
 /*______________________________________________________________________________________
  *
  * Update theme
@@ -316,43 +319,76 @@ var prompts = [{
 
 });
 
-function update_theme(headingFont, displayFont, primaryColor) {
+ function update_theme(headingFont, displayFont, primaryColor) {
+
+  console.log('headingFont is now ' + headingFont);
+  console.log('displayFont is now ' + displayFont);
+  console.log('primaryColor is now ' + primaryColor);
+  console.log('working... ');
+
+  function getFontName(fontArg) {
+    if (fontArg.indexOf(':') === -1) {
+      return fontArg.split('+').join(' ');
+    }
+    return fontArg.split('+').join(' ').substring(0, fontArg.indexOf(':')).replace(':', '');
+  }
+
+
+  function replaceHeadingFont() {
+    return gulp
+    .src('./_sass/theme.scss')
+    .pipe(stripLine(/^./))
+    .pipe(replace('\n', ''))
+    .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
+    .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
+    .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
+    .pipe(gulp.dest('./_sass'));
+  }
+
+  function resetCssInjection() {
+
+    return gulp
+    .src('./css/main.scss')
+    .pipe(deleteLines({'filters': [
+      /generated/
+      ]}))
+    .pipe(gulp.dest('./css'));
+  }
+
+  function replaceCssInjection() {
+    var fontsContent = fs.readFileSync("./fonts/fonts.css", "utf8");
+    return gulp
+     .src('./fonts/fonts.css')
+      .pipe(replace('\n', '/*generated automatically*/\n'))
+      .pipe(replace('url(', 'url("{{site.baseurl}}/fonts/'))
+      .pipe(replace('.woff', '.woff"'))
+      .pipe(insert.prepend('/* font-face definition */\n'))
+      .pipe(gulp.dest('./fonts'));
+  }
+
+  function injectToMainScss() {
+    return gulp.src('./css/main.scss')
+      .pipe(gfi({
+        "/* font-face definition */": "./fonts/fonts.css"
+      }))
+      .pipe(gulp.dest('./css'));
+  }
+
+  var headingFontName = getFontName(headingFont);
+  var displayFontName = getFontName(displayFont);
+
+  fs.writeFileSync('fonts.list', headingFont + '\n' + displayFont, 'utf-8');
+  fs.emptyDirSync('fonts');
   
-    console.log('headingFont is now ' + headingFont);
-    console.log('displayFont is now ' + displayFont);
-    console.log('primaryColor is now ' + primaryColor);
-    
-    function getFontName(fontArg) {
-        if (fontArg.indexOf(':') === -1) {
-          return fontArg.split('+').join(' ');
-        }
-        return fontArg.split('+').join(' ').substring(0, fontArg.indexOf(':')).replace(':', '');
-      }
-
-      var headingFontName = getFontName(headingFont);
-      var displayFontName = getFontName(displayFont);
-
-      function replaceHeadingFont() {
-        return gulp
-        .src('./_sass/theme.scss')
-        .pipe(stripLine(/^./))
-        .pipe(replace('\n', ''))
-        .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
-        .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
-        .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
-        .pipe(gulp.dest('./_sass'));
-      }
-
-      var options = { };
-
-      gulp.src('./fonts/**', {read: false})
-      // .pipe(clean())
-      .pipe(gulpFn(function() {
-        fs.writeFile('fonts.list', headingFont + '\n' + displayFont, function() {
-          return gulp.src('./fonts.list')
-          .pipe(googleWebFonts(options))
-          .pipe(gulp.dest('fonts'))
-          .pipe(gulpFn(replaceHeadingFont))
+  gulp.src('./fonts.list')
+    .pipe(googleWebFonts({}))
+    .pipe(gulp.dest('fonts'))
+      .on('finish', function() {
+        replaceHeadingFont();
+        resetCssInjection();
+        replaceCssInjection().on('finish', function() {
+          injectToMainScss();
+          console.log('done');
         });
-      }));
+      });
 }
