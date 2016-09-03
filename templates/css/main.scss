@@ -15,7 +15,8 @@ $enable-transitions:        true;
 
 /* Theme-related values here
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
-@import "{{site.baseurl}}/fonts/fonts.css";
+/* font-face definition */
+
 @import "theme";
 
 /* Changing a few default of Bootstrap 4
