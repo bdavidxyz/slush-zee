@@ -1,4 +1,5 @@
-# Slush Slush-zee [![Build Status](https://secure.travis-ci.org/bdavidxyz/slush-zee.png?branch=master)](https://travis-ci.org/bdavidxyz/slush-zee) [![NPM version](https://badge-me.herokuapp.com/api/npm/slush-zee.png)](http://badges.enytc.com/for/npm/slush-zee)
+# Slush-zee
+[![NPM version](https://badge-me.herokuapp.com/api/npm/slush-zee.png)](http://badges.enytc.com/for/npm/slush-zee)
 
 > A landing page generator
 
