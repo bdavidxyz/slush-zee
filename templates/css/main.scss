@@ -16,6 +16,39 @@ $enable-transitions:        true;
 /* Theme-related values here
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 /* font-face definition */
+@font-face {/*generated automatically*/
+	font-family: 'Roboto';/*generated automatically*/
+	font-style: normal;/*generated automatically*/
+	font-weight: 300;/*generated automatically*/
+	src: url("{{site.baseurl}}/fonts/Roboto-normal-300.woff") format('woff');/*generated automatically*/
+	unicode-range: U+0-10FFFF;/*generated automatically*/
+}/*generated automatically*/
+/*generated automatically*/
+@font-face {/*generated automatically*/
+	font-family: 'Roboto';/*generated automatically*/
+	font-style: normal;/*generated automatically*/
+	font-weight: 400;/*generated automatically*/
+	src: url("{{site.baseurl}}/fonts/Roboto-normal-400.woff") format('woff');/*generated automatically*/
+	unicode-range: U+0-10FFFF;/*generated automatically*/
+}/*generated automatically*/
+/*generated automatically*/
+@font-face {/*generated automatically*/
+	font-family: 'Roboto';/*generated automatically*/
+	font-style: normal;/*generated automatically*/
+	font-weight: 700;/*generated automatically*/
+	src: url("{{site.baseurl}}/fonts/Roboto-normal-700.woff") format('woff');/*generated automatically*/
+	unicode-range: U+0-10FFFF;/*generated automatically*/
+}/*generated automatically*/
+/*generated automatically*/
+@font-face {/*generated automatically*/
+	font-family: 'Roboto Condensed';/*generated automatically*/
+	font-style: normal;/*generated automatically*/
+	font-weight: 700;/*generated automatically*/
+	src: url("{{site.baseurl}}/fonts/Roboto_Condensed-normal-700.woff") format('woff');/*generated automatically*/
+	unicode-range: U+0-10FFFF;/*generated automatically*/
+}/*generated automatically*/
+/*generated automatically*/
+
 
 @import "theme";
 
@@ -62,3 +95,4 @@ $spacers: (
 
 
 //Import SCSS of sections here
+@import "zee/hero2";@import "zee/goal1";

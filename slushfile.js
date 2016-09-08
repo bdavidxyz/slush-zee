@@ -11,6 +11,7 @@
  var sections = {
   hero1: ['html', 'css'],
   hero2: ['html', 'css'],
+  goal1: ['js', 'css'],
   feature1: ['html'],
   feature2: ['html', 'css'],
   feature3: ['html'],
@@ -89,7 +90,7 @@ var defaults = (function() {
 /*______________________________________________________________________________________
  *
  *
- * Default 
+ * Default
  *
  *______________________________________________________________________________________
  */
@@ -304,7 +305,7 @@ gulp.task('default', function(done) {
     message: 'Which color do you want as primary color ? (for ex. #0275d8)'
   }
   ];
-  
+
   //Ask
   inquirer.prompt(prompts,
     function(answers) {
@@ -339,9 +340,9 @@ gulp.task('default', function(done) {
     .src('./_sass/theme.scss')
     .pipe(stripLine(/^./))
     .pipe(replace('\n', ''))
-    .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))   
-    .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))   
-    .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))   
+    .pipe(insert.append('$headings-font-family: "' + headingFontName + '";\n'))
+    .pipe(insert.append('$font-family-base: "' + displayFontName + '";\n'))
+    .pipe(insert.append('$brand-primary: ' + primaryColor + ';\n'))
     .pipe(gulp.dest('./_sass'));
   }
 
@@ -379,7 +380,7 @@ gulp.task('default', function(done) {
 
   fs.writeFileSync('fonts.list', headingFont + '\n' + displayFont, 'utf-8');
   fs.emptyDirSync('fonts');
-  
+
   gulp.src('./fonts.list')
     .pipe(googleWebFonts({}))
     .pipe(gulp.dest('fonts'))
