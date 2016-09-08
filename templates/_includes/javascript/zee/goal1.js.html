@@ -24,7 +24,7 @@ $( document ).ready(function() {
         return new Promise(function(resolve, reject) {
           $.ajax(
                   {
-                    url: 'https://formspree.io/bdavidxyz@gmail.com',
+                    url: 'https://formspree.io/' + '{{ site.email }}',
                     method: 'POST',
                     data: 'email=' + $('input.swal2-input').val(),
                     dataType: 'json',
@@ -46,48 +46,6 @@ $( document ).ready(function() {
         html: 'We successfully received your email: ' + email
       });
     }).done(function() {});
-    // // swal({
-    //   title: 'Please enter email',
-    //   text: 'Web hate spam as much as you do',
-    //   input: 'email',
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Submit',
-    //   confirmButtonColor: $('.js-main-cta').css('backgroundColor'),
-    //   showLoaderOnConfirm: true,
-    //   buttonsStyling:true,
-    //   // confirmButtonClass:'btn btn-primary',
-    //   // cancelButtonClass:'btn btn-outline-primary m-l-1',
-    //   preConfirm: function(email) {
-    //     return new Promise(function(resolve, reject) {
-    //       $.ajax(
-    //         {
-    //           url: 'https://formspree.io/bdavidxyz@gmail.com',
-    //           method: 'POST',
-    //           data: 'name=Roger&_replyto=blabla%40gtruc.com',
-    //           dataType: 'json',
-    //           success: function(data){
-    //             resolve();
-    //           },
-    //           error: function(data){
-    //             reject('An Unexpected error occured.');
-    //           }
-    //         }
-    //       )})
-    //       .then(function(email) {
-    //         swal({
-    //           type: 'success',
-    //           title: 'Email submitted successfull',
-    //           html: 'Address entered: ' + email
-    //         });
-    //       });
-    //
-    //
-    //
-    //
-    //   },
-    //   allowOutsideClick: false
-    //
-    // });
   });
 
 });
