@@ -83,7 +83,7 @@ $spacers: (
 
 // Import external librairies
 @import "bootstrap/bootstrap";
-// end-extlib 
+// end-extlib
 
 //Import our own files
 @import "zee/override-bootstrap";
@@ -95,4 +95,3 @@ $spacers: (
 
 
 //Import SCSS of sections here
-@import "zee/hero2";@import "zee/goal1";
